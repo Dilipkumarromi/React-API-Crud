@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import axios from 'axios';
-import { Link,BrowserRouter } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import Swal from 'sweetalert2'
 function Crud()
 {
@@ -47,6 +47,12 @@ function Crud()
         
     }
         
+    const _onSearch=async(e)=>{
+        console.log('enter id',e);
+     await axios.get(`http://localhost:80/student/findByid?id=${e}`).then(res=>{
+        setUsers(res.data)
+     })
+    }
     return(
         <>
         <h1 className="text-center">Welcome to Crud API</h1>
@@ -68,7 +74,11 @@ function Crud()
                     </form>
                 </div>
                 <div className="col-md-8">
+                    <div className='col-md-4'>
+                        <input type="text" placeholder='Enter email' className='form-control' onChange={(e)=>_onSearch(e)}/>
+                    </div>
                 <table className="table">
+
                     <thead>
                         <tr>
                         <th scope="col">#</th>

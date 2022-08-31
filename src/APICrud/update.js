@@ -1,7 +1,10 @@
 import React,{ useEffect,useState } from "react"
 import axios from "axios"
-import {useParams} from 'react-router-dom'
+// import Crud from "./Crud";
+import {useParams,useNavigate } from 'react-router-dom'
 function Update(){
+
+    const _navigate=useNavigate();
     let { id } = useParams();
     console.log('params:',id)
     // const [users,setUsers]=useState([])
@@ -9,7 +12,7 @@ function Update(){
         email:"",
         mobile:""
     })
-   
+   const {email,mobile}=input
 
         useEffect(()=>{
             try{
@@ -18,7 +21,10 @@ function Update(){
                 {
                   const res=  await axios.get(`http://localhost:80/student/findByid?id=${id}`)
                   console.log('ddd',res.data.result)
-                  setInput(res.data.result)
+                  setInput({
+                    email:res.data.result.email,
+                    mobile:res.data.result.mobile
+                  })
                 }
                 GetData()
             }
@@ -26,8 +32,11 @@ function Update(){
                 console.log(`error:${e.message}`)
             }
         },[id]) 
-        const upd=async()=>{
-            await axios.patch()
+        const upd=async(e)=>{
+            e.preventDefault()
+            await axios.patch(`http://localhost:80/student/update?id=${id}`,input).then(result=>{
+                _navigate("/")
+            })
         }
     
     return(
@@ -35,15 +44,15 @@ function Update(){
             <div className="container">
                 <div className="row">
                     <div className="col-8">
-                    <form>
+                    <form onSubmit={upd}>
                     <div className="form-group mb-2">
                         <label  >Email address</label>
-                        <input type="email" name="email" className="form-control" placeholder="Enter email" onChange={(e)=>setInput({...input,[e.target.name]:e.target.value})} value={input.value}/>
+                        <input type="email" name="email" className="form-control" placeholder="Enter email" onChange={(e)=>setInput({...input,[e.target.name]:e.target.value})} value={email}/>
                         
                     </div>
                     <div className="form-group mb-3">
                         <label  >Password</label>
-                        <input type="text" name="mobile" className="form-control" placeholder="Mobile" onChange={(e)=>setInput({...input,[e.target.name]:e.target.value})} value={input.value}/>
+                        <input type="text" name="mobile" className="form-control" placeholder="Mobile" onChange={(e)=>setInput({...input,[e.target.name]:e.target.value})} value={mobile}/>
                     </div>
                     
                     <button type="submit"  className="btn btn-primary ">Submit</button>
