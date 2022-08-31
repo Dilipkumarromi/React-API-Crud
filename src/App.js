@@ -1,11 +1,19 @@
-import Crud from "./APICrud/Crud";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
- function App() {
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter, Route, Routes,Link, Navigate } from 'react-router-dom';
+import Crud from './APICrud/Crud';
+import Update from './APICrud/update'
+function App() {
   return (
-    <div className="App">
-      <Crud/>
-    </div>
+    <>   
+    <BrowserRouter>
+    <Routes>
+       <Route path='/' element={<div><Crud></Crud></div>}/>
+       <Route path="/update/:id" element={<Update/>}/>
+    </Routes>
+    </BrowserRouter>
+    
+    </>
   );
 }
 
